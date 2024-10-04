@@ -1,35 +1,28 @@
-document.getElementById("yesBtn").onclick = function() {
-    document.getElementById("responseForm").style.display = "flex";
-};
+document.getElementById('submitResponse').addEventListener('click', function() {
+    const guestName = document.getElementById('guestName').value;
+    const guestCount = document.getElementById('guestCount').value;
+    const alcoholPrefs = document.getElementById('alcoholPrefs').value;
 
-document.getElementById("noBtn").onclick = function() {
-    document.getElementById("notComingForm").style.display = "flex";
-};
-
-document.getElementById("guestForm").onsubmit = function(event) {
-    event.preventDefault();
-    const name = document.getElementById("name").value;
-    const guests = document.getElementById("guests").value;
-    const alcohol = document.getElementById("alcohol").value;
-
-    saveResponse("yes", name, guests, alcohol);
-    document.getElementById("message").innerText = "Спасибо за ответ!";
-    closeForms();
-};
-
-document.getElementById("notComingGuestForm").onsubmit = function(event) {
-    event.preventDefault();
-    const notComingName = document.getElementById("notComingName").value;
-
-    saveResponse("no", notComingName);
-    document.getElementById("message").innerText = "Сожалеем, что вы не будете с нами";
-    closeForms();
-};
-
-function closeForms() {
-    document.getElementById("responseForm").style.display = "none";
-    document.getElementById("notComingForm").style.display = "none";
-}
+    fetch('https://script.google.com/macros/s/AKfycbzFP2T0frttzwOjaikcSETXMu4Jl87fdpmBEx3GpZXcqxq4zKHhWT7kKBiul7_-bhq1/exec', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            guestName: guestName,
+            guestCount: guestCount,
+            alcoholPrefs: alcoholPrefs
+        })
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data); // Сообщение о статусе
+        document.getElementById('responseDialog').style.display = 'none';
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+});
 
 function saveResponse(type, name, guests = null, alcohol = null) {
     const url = 'https://script.google.com/macros/s/AKfycbz0NOoV9YVxLw9wxpxkk1hn-fImdy_5GZga-dMo3gMGHnlW_aYPX6K2rasTSTBq-2Eu/exec';
