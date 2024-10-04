@@ -45,7 +45,7 @@ function saveResponse(type, name, guests = null, alcohol = null) {
 }
 document.addEventListener('DOMContentLoaded', function() {
     // конечная дата, например 1 июля 2021
-    const deadline = new Date(2025, 09, 29);
+    const deadline = new Date(2025, 8, 29);
     // id таймера
     let timerId = null;
     // склонение числительных

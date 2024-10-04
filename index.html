@@ -16,8 +16,8 @@
 
 
 
-<!-- <style> -->
-  <!-- /*  body {
+<style>  
+     body {
    /*     display: flex;
    /*     justify-content: center; /* Центрирование по горизонтали */
    /*     align-items: center;    /* Центрирование по вертикали */
@@ -25,7 +25,7 @@
   /*      margin: 0;             /* Убрать отступы */
   /*      position: relative;     /* Для позиционирования текста */
    /*     overflow: hidden;       /* Скрытие излишков, если нужно */
-        /*max-width: 375px;        размер телефона 375х800 */
+          max-width: 375px;        /*размер телефона 375х800   */
    /* }
   /*  img {
    /*     max-width: 100%;      /* Ограничение максимальной ширины изображения */
@@ -41,57 +41,71 @@
     /*    text-align: center;     /* Центрирование текста */
     /*    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон для читаемости текста */
    /*     padding: 20px;         /* Отступы вокруг текста */
-    /*    border-radius: 10px; }  /* Закругленные углы */  -->
-
-<!-- </style>-->
+    /*    border-radius: 10px; }  /* Закругленные углы */  
+     }
+ </style>
+</head>
+<title>Приглашение на свадьбу</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        #responseDialog {
+            display: none;
+            margin-top: 20px;
+        }
+        input {
+            margin: 10px 0;
+            padding: 8px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
+    <h1>Приглашение на свадьбу</h1>
+    <button id="yesBtn">Да</button>
+    <button id="noBtn">Нет</button>
 
-</body>
-<body>
-    <div class="container">
-        <h1>Приглашение на нашу свадьбу</h1>
-        <p>Дата: 29 августа 2025 года<br>
-           Время: 10:00<br>
-           <a href="https://yandex.ru/maps/-/CDT8RFZL">Место: Екатерининский загс</a>            
-           <br><a href="https://yandex.ru/maps/-/CDT8RVKQ">Ресторан: "Альянс"</a> </br>
-        <div class="circle">
-            <p>Александра & Денис</p>
-        </div>
-        <div class="timer">
-            <div class="timer__items">
-              <div class="timer__item timer__days">00</div>
-              <div class="timer__item timer__hours">00</div>
-              <div class="timer__item timer__minutes">00</div>
-              <div class="timer__item timer__seconds">00</div>
-            </div>
-          </div>
-        <button id="yesBtn">Да</button>
-        <button id="noBtn">Нет</button>
+    <div id="responseDialog">
+        <h2>Заполните информацию</h2>
+        <input type="text" id="guestName" placeholder="Ваше имя">
+        <input type="number" id="guestCount" placeholder="Сколько гостей будет с вами">
+        <input type="text" id="alcoholPrefs" placeholder="Пожелания по алкоголю">
+        <button id="submitResponse">Отправить</button>
     </div>
 
-    <div id="responseForm" class="modal">
-        <form id="guestForm">
-            <h3>Ваше имя</h3>
-            <input type="text" id="name" required>
-            <h3>Сколько гостей будет с вами?</h3>
-            <input type="number" id="guests" required>
-            <h3>Пожелания по алкоголю</h3>
-            <textarea id="alcohol" required></textarea>
-            <button type="submit">Отправить</button>
-        </form>
-    </div>
+    <script>
+        document.getElementById('yesBtn').onclick = function() {
+            document.getElementById('responseDialog').style.display = 'block';
+        };
 
-    <div id="notComingForm" class="modal">
-        <form id="notComingGuestForm">
-            <h3>Ваше имя</h3>
-            <input type="text" id="notComingName" required>
-            <button type="submit">Отправить</button>
-        </form>
-    </div>
+        document.getElementById('noBtn').onclick = function() {
+            alert('Спасибо за ваш ответ!');
+        };
 
-    <div id="message"></div>
+        document.getElementById('submitResponse').onclick = function() {
+            const name = document.getElementById('guestName').value;
+            const count = document.getElementById('guestCount').value;
+            const alcoholPrefs = document.getElementById('alcoholPrefs').value;
 
-    <script src="script.js"></script>
+            if (name && count) {
+                google.script.run.withSuccessHandler(() => {
+                    alert('Ваш ответ успешно отправлен!');
+                    document.getElementById('responseDialog').style.display = 'none';
+                    document.getElementById('guestName').value = '';
+                    document.getElementById('guestCount').value = '';
+                    document.getElementById('alcoholPrefs').value = '';
+                }).submitResponse({ name, count, alcoholPrefs });
+            } else {
+                alert('Пожалуйста, заполните все поля!');
+            }
+        };
+    </script>
 </body>
 </html>
